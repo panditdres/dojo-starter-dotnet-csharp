@@ -58,6 +58,28 @@ namespace Dojo.Tests
             Assert.Equal(0, items[0].SellIn);
         }
 
+        [Theory]
+        [InlineData(0), InlineData(1), InlineData(-1)]
+        public void GivenSellIn_ThenQualityShouldNotGoNegative(int sellIn)
+        {
+            var (sut, items) = Arrange(Item("Orange", 0, sellIn));
+
+            sut.UpdateQuality();
+
+            Assert.Equal(0, items[0].Quality);
+        }
+
+        [Theory]
+        [InlineData(10,38), InlineData(1, 38), InlineData(0, 36), InlineData(-10, 36)]
+        public void GivenConjuredItem_QualityShouldDegradeTwice(int sellIn, int expectedQuality)
+        {
+            var (sut, items) = Arrange(Item("Conjured", 40, sellIn));
+
+            sut.UpdateQuality();
+
+            Assert.Equal(expectedQuality, items[0].Quality);
+        }
+
         Item Item(string name, int quality, int sellIn) => new Item
         {
             Name = name,
