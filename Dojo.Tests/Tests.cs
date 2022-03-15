@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using Dojo.GildedRose;
 using Xunit;
 
@@ -16,32 +16,31 @@ namespace Dojo.Tests
         [Fact]
         public void GivenEndOfDay_ReduceQualityAndSellIn()
         {
-            // Arrange
-            var itemList = new List<Item>();
+            var (sut, items) = Arrange(Item("Orange", 10, 10));
 
-            var item = new Item()
-            {
-                Name = "Orange",
-                Quality = 10,
-                SellIn = 10
-            };
+            sut.UpdateQuality();
 
-            itemList.Add(item);
-
-            var guildedRose = new GildedRose.GildedRose(itemList);
-
-            // Act
-            guildedRose.UpdateQuality();
-
-            // Assert
-            Assert.Equal(9, itemList[0].Quality);
-            Assert.Equal(9, itemList[0].SellIn);
+            Assert.Equal(9, items[0].Quality);
+            Assert.Equal(9, items[0].SellIn);
         }
+
 
         [Fact]
         public void GivenSellInDatePassed_QualityDegradesTwice()
         {
+        }
 
+        Item Item(string name, int quality, int sellIn) => new Item
+        {
+            Name = name,
+            Quality = quality,
+            SellIn = sellIn
+        };
+
+        (GildedRose.GildedRose sut, List<Item> items) Arrange(params Item[] items)
+        {
+            var itemList = items.ToList();
+            return (new GildedRose.GildedRose(itemList), itemList);
         }
     }
 }
