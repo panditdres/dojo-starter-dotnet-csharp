@@ -43,5 +43,33 @@ namespace Dojo.Tests
         {
 
         }
+
+        public void UpdateQuality_AgedBrieIfQualityLessThan50ThenIncrementsBy1()
+        {
+            // Arrange
+            var itemList = new List<Item>();
+
+            var item = new Item()
+            {
+                Name = "Aged Brie",
+                Quality = 49,
+                SellIn = 10
+            };
+            
+            itemList.Add(item);
+
+            // Act
+            var guildedRose = new GildedRose.GildedRose(itemList);
+            guildedRose.UpdateQuality();
+
+            // Assert
+            Assert.Equal(50, itemList[0].Quality);
+        }
+
+        [Fact]
+        public void GivenSulfuras_ThenQualityDoesntChange()
+        {
+
+        }
     }
 }
